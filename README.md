@@ -1,354 +1,526 @@
-# Zepp OS Productivity Alarm App
+# Productivity Alarm - Amazfit Balance App
 
-✅ **FIXED: Now builds successfully with Zeus CLI** - All `app.json` configuration issues resolved!
+<div align="center">
 
-Productivity-focused alarm app for **Amazfit Balance** built with **Zepp OS SDK API_LEVEL 4.2**, featuring:
+**A productivity-focused alarm app with question-based dismissal and point rewards system**
 
-- ⏰ Multiple alarms per day with customizable wake-up requirements
-- ❓ Up to **30 yes/no questions** per alarm (configurable via Zepp App)
-- 🎯 **Points system** - earn/lose points based on your answers
-- 💰 **TND currency conversion** - see real-world value of your points
-- 📊 **History tracking** - monitor all point changes
-- 🎁 **Redeem system** - cash out in multiples of 1000 points (min 1000)
-- 📡 **Server sync** - backup and sync across devices
-- 🔔 **5-minute vibration** - won't stop until you answer required questions
+[![Zepp OS](https://img.shields.io/badge/Zepp%20OS-3.0-blue)](https://github.com/zepp-health/zeppos-samples)
+[![Amazfit Balance](https://img.shields.io/badge/Device-Amazfit%20Balance-orange)](https://www.amazfit.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+
+</div>
 
 ---
 
-## ⚡ Quick Start
+## 📱 Features
 
-### Build & Install
+### Core Functionality
 
-```bash
-# Clone the repo
-git clone https://github.com/MarvenAPPS/zepp-productivity-alarm.git
-cd zepp-productivity-alarm
+- ⏰ **Multiple Daily Alarms** - Configure up to 10 alarms per day
+- ❓ **Question-Based Dismissal** - Answer questions to stop vibration (won't stop for 5 minutes otherwise)
+- 🎯 **30 Customizable Questions** - Add/edit via Zepp mobile app
+- 📊 **Flexible Question Count** - Choose 1-30 questions per alarm
+- 💰 **Points System** - Earn/lose points based on answers
+- 📈 **Points History** - Track all point transactions
+- 💵 **TND Currency** - View balance in Tunisian Dinars (configurable rate)
+- 🔄 **Server Sync** - Sync balance with external server
+- 🏍️ **Redeem System** - Cash out points (minimum 1000, multiples of 1000)
+- 🛠️ **Reset Function** - Clear balance and history
 
-# Build (Zeus CLI required)
-zeus build
+### Technical Features
 
-# Install on watch
-zeus preview
-# Scan QR code with Zepp app Developer Mode
-```
-
-**Important**: Update `appId` in `app.json` with your own ID from [Zepp Developer Console](https://console.zepp.com/).
-
----
-
-## 🔧 Technical Details
-
-### API Versions
-
-- **Config Version**: `v3` (latest format)
-- **API_LEVEL**: Target `4.2` (latest features)
-- **Compatibility**: Works on API_LEVEL `3.7+`
-- **Zepp OS**: 4.0+ (original Amazfit Balance) and 5.0+ (Balance 2)
-
-### What Was Fixed
-
-The initial version had build errors. **All fixed now**:
-
-✅ Added `configVersion: "v3"` (required for latest Zeus CLI)  
-✅ Added `defaultLanguage: "en-US"` (required field)  
-✅ Added `platforms` array with Amazfit Balance specs (466x466, round)  
-✅ Updated API version: compatible `3.7`, target `4.2`  
-✅ Added multi-language support (English, French, Arabic)  
-
-See [CHANGELOG.md](CHANGELOG.md) for complete details.
+- ✅ Built with **Zepp OS v3 API**
+- ✅ Compatible with **Amazfit Balance**
+- ✅ Persistent storage with `localStorage`
+- ✅ Vibration motor integration
+- ✅ Clean, modern UI with dark theme
+- ✅ No external dependencies
+- ✅ Production-ready code
 
 ---
 
-## 📱 Project Structure
+## 📖 Table of Contents
 
-```bash
-zepp-productivity-alarm/
-├── app.json                  # ✅ FIXED - v3 config with all required fields
-├── app.js                    # App lifecycle handler
-├── page/
-│   ├── index.js              # Dashboard: balance, TND value, navigation
-│   ├── alarms.js             # Alarm list / enable-disable
-│   ├── questions.js          # Question browser (watch view)
-│   ├── history.js            # Points history + reset/redeem
-│   ├── settings.js           # Local settings summary
-│   └── alarm-trigger.js      # Alarm screen + vibration + Q&A
-├── utils/
-│   ├── storage.js            # Local data persistence
-│   ├── sync.js               # Server sync client
-│   └── alarm-engine.js       # Alarm scheduling logic
-├── server/                   # Node.js + Express + SQLite backend
-│   ├── server.js
-│   ├── package.json
-│   ├── .env.example
-│   ├── models/
-│   │   ├── database.js
-│   │   ├── user.js
-│   │   └── config.js
-│   └── routes/
-│       ├── sync.js
-│       └── config.js
-└── docs/
-    ├── INSTALLATION.md       # Detailed installation guide
-    └── API_FEATURES.md       # API 4.2 features & optimization
-```
+- [Installation](#-installation)
+- [Compilation](#-compilation)
+- [Usage](#-usage)
+- [Configuration](#%EF%B8%8F-configuration)
+- [App Structure](#-app-structure)
+- [Server Integration](#-server-integration)
+- [Development](#-development)
+- [Troubleshooting](#-troubleshooting)
+- [License](#-license)
 
 ---
 
-## 🎮 How It Works
-
-### Alarm Flow
-
-1. **Configure Alarms** - Set up multiple alarms per day (hour, minute, repeat pattern)
-2. **Set Questions** - Choose how many questions (1-30) required per alarm
-3. **Alarm Triggers** - At alarm time:
-   - Watch vibrates continuously (pattern: 500ms on, 500ms off)
-   - Randomly selects required number of questions from your pool
-   - Shows questions one by one with YES/NO buttons
-4. **Answer Questions** - Each answer:
-   - Awards or deducts points based on question settings
-   - Adds entry to history
-   - Syncs with server (if enabled)
-5. **Dismiss** - Vibration stops only when all required questions answered
-   - If not answered within 5 minutes, alarm auto-dismisses
-
-### Points & Redemption
-
-- **Earn/Lose Points**: Each question has `yesPoints` and `noPoints` values
-- **Track Balance**: See total points and TND equivalent on main screen
-- **View History**: All point changes logged with timestamp and action
-- **Redeem**: Convert points to currency (1000+ points, multiples of 1000)
-- **Reset**: Clear all history and reset balance to 0
-
-### Server Sync (Optional)
-
-- Syncs balance updates and history entries to external server
-- Allows multi-device tracking and backup
-- Server provides centralized question management
-- See [Backend Setup](#backend-server-setup) below
-
----
-
-## 💻 Installation Guide
+## 🛠️ Installation
 
 ### Prerequisites
 
-1. **Zeus CLI** (Zepp OS build tool)
+1. **Node.js** v16+ installed
+2. **Zeus CLI** installed globally:
    ```bash
    npm install -g @zeppos/zeus-cli
    ```
+3. **Zepp Mobile App** on your phone
+4. **Amazfit Balance** watch paired with phone
 
-2. **Amazfit Balance** watch paired with Zepp mobile app
-
-3. **Developer Mode** enabled in Zepp app:
-   - Open Zepp app
-   - Go to Profile → [Your Watch] → Scroll to bottom
-   - Tap "Developer Mode" multiple times to enable
-
-### Build Steps
+### Quick Start
 
 ```bash
 # 1. Clone repository
 git clone https://github.com/MarvenAPPS/zepp-productivity-alarm.git
 cd zepp-productivity-alarm
 
-# 2. Update appId in app.json
-# Get your appId from https://console.zepp.com/
-# Edit app.json: "appId": YOUR_ID_HERE
+# 2. Create icon (required)
+curl -o icon.png "https://via.placeholder.com/192/32B8C6/FFFFFF?text=PA"
+# OR use ImageMagick:
+# convert -size 192x192 xc:"#32B8C6" icon.png
 
 # 3. Build
 zeus build
 
-# 4. Preview (generates QR code)
+# 4. Install on watch
 zeus preview
-
-# 5. Scan QR with Zepp app Developer Mode
-# App installs automatically on your watch
+# Scan QR code with Zepp app (Developer Mode enabled)
 ```
 
-### Troubleshooting
+### Enable Developer Mode
 
-**Build errors**:
-- ✅ All `app.json` errors are fixed in latest version
-- Run `git pull origin main` to get latest fixes
-- Ensure Zeus CLI is updated: `npm update -g @zeppos/zeus-cli`
-
-**Installation issues**:
-- Make sure Developer Mode is enabled in Zepp app
-- Check watch is connected to Zepp app
-- Try `zeus login` before `zeus preview`
-
-Full guide: [docs/INSTALLATION.md](docs/INSTALLATION.md)
+1. Open **Zepp mobile app**
+2. Go to **Profile** → **About**
+3. Tap version number **10 times**
+4. Developer mode enabled!
+5. Scan QR code from `zeus preview`
 
 ---
 
-## 🛠️ Backend Server Setup
+## 🔨 Compilation
 
-Optional Node.js backend for sync and centralized configuration.
-
-### Quick Start
+### Build for Production
 
 ```bash
-cd server
-cp .env.example .env
-# Edit .env - set PORT, DB_PATH, DEFAULT_TND_RATE, etc.
+# Standard build
+zeus build
 
-npm install
-npm start
+# Clean build (recommended after changes)
+rm -rf dist/
+zeus build
+
+# Preview on watch
+zeus preview
 ```
 
-Server runs on `http://localhost:3000` (or your configured PORT).
+### Expected Build Output
 
-### Endpoints
+```
+✔ Updating devices, success.
+[ℹ] Start building package, targets: gt.
+[ℹ] Bundling app ...
+[ℹ] Package name: productivity-alarm
+[✔] Build package success!
+```
 
-**Sync**:
-- `POST /api/sync/balance` - Sync balance update
-- `POST /api/sync/full` - Full history sync
-- `GET /api/sync/data/:deviceId` - Get device data
+### Build Troubleshooting
 
-**Config**:
-- `GET /api/config` - Get configuration (TND rate, questions)
-- `PUT /api/config` - Update configuration
-- `GET /api/config/questions` - Get questions
-- `PUT /api/config/questions` - Update questions (max 30)
+| Error | Solution |
+|-------|----------|
+| "package name undefined" | Add `package.json` with `name` field |
+| "icon does not exist" | Create `icon.png` (192x192) in root |
+| "no matching target devices" | Check `app.json` uses `"gt"` target |
+| "paths[3] undefined" | Use `.page.js` extension for page files |
 
-**Health**:
-- `GET /health` - Server health check
-
-### Connecting Watch to Server
-
-In watch Settings or via Zepp app, configure:
-- `server_url`: Your server URL (e.g., `https://your-domain.com`)
-- `sync_enabled`: Set to `true`
-
-Sync happens automatically when:
-- Answering questions
-- Redeeming points
-- Manually triggered (future feature)
+See [BUILD_FIX.md](BUILD_FIX.md) and [V3_RESTRUCTURE.md](V3_RESTRUCTURE.md) for details.
 
 ---
 
-## 👀 Data Model
+## 📱 Usage
 
-### Questions
-```json
+### Dashboard (Main Page)
+
+- **View Balance** - Total points earned
+- **TND Equivalent** - Real currency value
+- **Active Alarms** - Number of enabled alarms
+- **Navigation** - Access Alarms, History, Settings
+
+### Alarms Page
+
+- **View Alarms** - List of 10 configurable alarms
+- **Toggle ON/OFF** - Enable/disable individual alarms
+- **View Details** - See time and question count
+- **Configure** - Set via Zepp mobile app
+
+### Alarm Trigger
+
+When alarm fires:
+
+1. 🔴 Screen turns **RED**
+2. 🔔 Watch **vibrates** continuously
+3. ❓ **Question appears**
+4. ✅ Answer **YES** or **NO**
+5. 🔁 **Repeat** for N questions
+6. ✅ **Alarm stops** after all answered
+7. 📊 **Points updated** automatically
+
+**Note:** Vibration won't stop for **5 minutes** unless you answer all questions!
+
+### Questions Page
+
+- **Browse** all 30 questions
+- **View points** for YES/NO answers
+- **Navigate** with < > buttons
+- **Edit** via Zepp mobile app
+
+### History Page
+
+- **View transactions** - Recent point changes
+- **See timestamps** - When points were earned/lost
+- **Reset balance** - Clear everything
+- **Redeem points** - Cash out (min 1000 pts)
+
+### Settings Page
+
+- **TND Rate** - View conversion rate
+- **Server Sync** - Toggle ON/OFF
+- **Server URL** - View configured endpoint
+- **Configure** - All settings via Zepp app
+
+---
+
+## ⚙️ Configuration
+
+### Via LocalStorage (Watch)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `balance` | number | 0 | Current point balance |
+| `tnd_rate` | float | 0.001 | Points to TND conversion |
+| `alarms` | JSON | [] | Array of alarm objects |
+| `questions` | JSON | [] | Array of 30 questions |
+| `history` | JSON | [] | Point transaction history |
+| `sync_enabled` | boolean | false | Enable server sync |
+| `server_url` | string | "" | Server endpoint URL |
+
+### Via Zepp Mobile App (Companion App)
+
+**Note:** Companion app development is separate from watch app. You'll need to create:
+
+1. **Settings page** in companion app
+2. **Question editor** with add/edit/delete
+3. **Alarm configurator** with time picker
+4. **Sync settings** with server URL input
+
+Data is synced between watch and phone using Zepp OS APIs.
+
+### Alarm Object Structure
+
+```javascript
 {
-  "id": 0,
-  "text": "Did you exercise today?",
-  "yesPoints": 10,
-  "noPoints": -5
+  id: 0,                    // Unique ID
+  hour: 8,                  // 0-23
+  minute: 0,                // 0-59
+  enabled: false,           // true/false
+  questionsToAnswer: 5,     // 1-30
+  repeat: [1,1,1,1,1,0,0]  // Mon-Sun (1=enabled)
 }
 ```
 
-### Alarms
-```json
-{
-  "id": 0,
-  "hour": 7,
-  "minute": 0,
-  "enabled": true,
-  "questionsToAnswer": 5,
-  "repeat": [1, 1, 1, 1, 1, 0, 0]
-}
-```
-`repeat`: Mon-Sun (1=enabled, 0=disabled)
+### Question Object Structure
 
-### History Entry
-```json
+```javascript
 {
-  "timestamp": 1733349600000,
-  "action": "Answered: Did you exercise...",
-  "points": 10
+  id: 0,                       // Unique ID
+  text: "Did you exercise?",   // Question text
+  yesPoints: 10,               // Points for YES
+  noPoints: -5                 // Points for NO
 }
 ```
 
-### Settings
-- `balance`: Total points (integer)
-- `tnd_rate`: Points-to-TND conversion (default: 0.001)
-- `sync_enabled`: Enable server sync (boolean)
-- `server_url`: Backend URL (string)
-- `vibration_duration`: Max vibration time in ms (default: 300000)
+### History Entry Structure
 
----
-
-## 🚀 API_LEVEL 4.2 Features
-
-Current implementation uses base APIs (3.7+). Future enhancements with 4.2:
-
-- **Custom Keyboard**: Add/edit questions directly on watch
-- **Device UUID**: Better device identification for sync
-- **Audio Alerts**: Sound in addition to vibration
-- **Background Sync**: Automatic periodic sync
-- **Workout Integration**: Bonus points during workouts
-
-See [docs/API_FEATURES.md](docs/API_FEATURES.md) for details.
-
----
-
-## 📋 Use Cases
-
-### Morning Accountability
-```
-Alarm 1 (7:00 AM):
-- Question 1: Did you get 8 hours of sleep? (+10 / -5)
-- Question 2: Ready to exercise? (+10 / -5)
-- Question 3: Breakfast planned? (+5 / -3)
+```javascript
+{
+  timestamp: 1234567890,    // Unix timestamp (ms)
+  action: "Question text",  // What happened
+  points: 10                // Points change (+/-)
+}
 ```
 
-### Work Productivity
+---
+
+## 📚 App Structure
+
+### File Organization
+
 ```
-Alarm 2 (9:00 AM):
-- Question 1: Tasks prioritized? (+10 / -5)
-- Question 2: Distractions minimized? (+10 / -5)
-- Question 3: Goals clear? (+10 / -5)
+zepp-productivity-alarm/
+├── app.json                 # App configuration
+├── app.js                   # App lifecycle
+├── package.json             # Package info
+├── icon.png                 # App icon (192x192)
+├── page/
+│   ├── index.page.js        # Main dashboard
+│   ├── alarms.page.js       # Alarm list
+│   ├── history.page.js      # Points history
+│   ├── settings.page.js     # App settings
+│   ├── alarm-trigger.page.js # Alarm UI
+│   └── questions.page.js    # Question browser
+├── README.md                # This file
+├── BUILD_FIX.md             # Build troubleshooting
+├── V3_RESTRUCTURE.md        # v3 API guide
+└── ICON_SETUP.md            # Icon creation guide
 ```
 
-### Evening Review
+### Page Descriptions
+
+| Page | File | Purpose |
+|------|------|----------|
+| **Dashboard** | `index.page.js` | Main screen with balance and navigation |
+| **Alarms** | `alarms.page.js` | View and toggle alarms |
+| **History** | `history.page.js` | View transactions, reset, redeem |
+| **Settings** | `settings.page.js` | App configuration |
+| **Trigger** | `alarm-trigger.page.js` | Alarm dismissal UI |
+| **Questions** | `questions.page.js` | Browse questions |
+
+### Data Flow
+
 ```
-Alarm 3 (9:00 PM):
-- Question 1: Exercise completed? (+15 / -10)
-- Question 2: Healthy meals? (+10 / -5)
-- Question 3: Learning time? (+10 / -5)
-- Question 4: Helped someone? (+5 / -0)
-- Question 5: Avoided procrastination? (+15 / -10)
+1. Alarm fires → alarm-trigger.page.js
+2. Questions loaded from localStorage
+3. User answers → Points calculated
+4. Balance updated → localStorage
+5. History entry added
+6. [Optional] Sync to server
+7. Return to dashboard
 ```
 
-### Redemption
-- Reach 1000+ points
-- Redeem in multiples of 1000
-- Track TND value in real-time
-- Use for personal rewards or tracking
+---
+
+## 🌐 Server Integration
+
+### API Endpoint (Expected)
+
+Your server should expose:
+
+```
+POST /api/sync-balance
+Content-Type: application/json
+
+{
+  "deviceId": "amazfit_balance_123",
+  "balance": 1250,
+  "timestamp": 1234567890,
+  "history": [
+    {
+      "timestamp": 1234567890,
+      "action": "Question answered",
+      "points": 10
+    }
+  ]
+}
+```
+
+### Server Response
+
+```json
+{
+  "success": true,
+  "serverBalance": 1250,
+  "synced": true
+}
+```
+
+### Implementation Notes
+
+1. Sync is **triggered** when `sync_enabled` is true
+2. Sync happens after **each point change**
+3. Server URL from `localStorage.getItem('server_url')`
+4. Use Zepp OS `fetch()` API for HTTP requests
+5. Handle **offline mode** gracefully
+6. Queue failed requests for **retry**
+
+### Example Sync Code (Add to `alarm-trigger.page.js`)
+
+```javascript
+syncToServer() {
+  const syncEnabled = localStorage.getItem('sync_enabled') === 'true';
+  const serverUrl = localStorage.getItem('server_url');
+  
+  if (!syncEnabled || !serverUrl) return;
+  
+  const balance = parseInt(localStorage.getItem('balance') || '0');
+  const history = JSON.parse(localStorage.getItem('history') || '[]');
+  
+  fetch(serverUrl + '/api/sync-balance', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      deviceId: 'amazfit_balance_' + Date.now(),
+      balance: balance,
+      timestamp: Date.now(),
+      history: history.slice(0, 10) // Last 10 entries
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log('Sync success:', data);
+  })
+  .catch(err => {
+    console.log('Sync failed:', err);
+  });
+}
+```
 
 ---
 
-## 📚 Documentation
+## 👨‍💻 Development
 
-- [INSTALLATION.md](docs/INSTALLATION.md) - Complete installation guide
-- [API_FEATURES.md](docs/API_FEATURES.md) - API 4.2 features and optimizations
-- [CHANGELOG.md](CHANGELOG.md) - Version history and fixes
+### Prerequisites
+
+```bash
+# Install dependencies
+npm install -g @zeppos/zeus-cli
+
+# Check version
+zeus --version
+```
+
+### Development Workflow
+
+```bash
+# 1. Make changes to page/*.page.js files
+
+# 2. Build
+zeus build
+
+# 3. Test on watch
+zeus preview
+
+# 4. Commit
+git add .
+git commit -m "Add feature X"
+git push origin main
+```
+
+### Adding New Features
+
+1. **New Page:**
+   ```bash
+   # Create page/new-feature.page.js
+   # Add to app.json pages array
+   # Add navigation button in index.page.js
+   ```
+
+2. **New Storage:**
+   ```javascript
+   // Save
+   localStorage.setItem('key', 'value');
+   
+   // Load
+   const value = localStorage.getItem('key');
+   ```
+
+3. **New Navigation:**
+   ```javascript
+   import { push } from '@zos/router';
+   push({ url: 'page/new-feature.page' });
+   ```
+
+### Code Style
+
+- Use **ES6+** syntax
+- **Descriptive** variable names
+- **Comments** for complex logic
+- **Error handling** with try/catch
+- **Consistent** indentation (2 spaces)
 
 ---
 
-## 🛡️ License
+## ⚠️ Troubleshooting
 
-MIT License - See LICENSE file for details
+### Build Errors
+
+**"Package name is undefined"**
+```bash
+# Solution: Add package.json
+cat > package.json << 'EOF'
+{
+  "name": "productivity-alarm",
+  "version": "1.0.0"
+}
+EOF
+```
+
+**"Icon does not exist"**
+```bash
+# Solution: Create icon.png
+curl -o icon.png "https://via.placeholder.com/192/32B8C6/FFFFFF?text=PA"
+```
+
+**"No matching target devices"**
+```bash
+# Solution: Check app.json uses "gt" target
+cat app.json | grep '"gt"'
+```
+
+### Runtime Errors
+
+**Alarm doesn't fire**
+- Check alarm is **enabled**
+- Verify **system permissions**
+- Check **time format** (24-hour)
+
+**Points not saving**
+- Check **localStorage** quota
+- Verify **JSON.stringify** valid
+- Clear cache and rebuild
+
+**Vibration not stopping**
+- Answer **all questions**
+- Check **vibration interval** cleared
+- Force close and reopen app
+
+### Performance Issues
+
+**App slow to load**
+- Reduce **history** size (keep last 100)
+- Optimize **rendering** (fewer widgets)
+- Clear old **localStorage** data
+
+**Battery drain**
+- Reduce **vibration** duration
+- Optimize **alarm checks**
+- Disable **sync** when not needed
 
 ---
 
-## 👤 Author
+## 📄 License
 
-**MarvenAPPS**  
-GitHub: [@MarvenAPPS](https://github.com/MarvenAPPS)
-
----
-
-## ⭐ Support
-
-If this app helps you build better habits:
-- ⭐ Star this repository
-- 🐛 Report issues on GitHub
-- 💡 Suggest features in Issues
-- 🤝 Contribute via Pull Requests
+MIT License - See [LICENSE](LICENSE) file
 
 ---
 
-**Built with Zepp OS SDK | Targeting API_LEVEL 4.2 | Compatible with Amazfit Balance**
+## 👥 Credits
+
+**Developer:** MarvenAPPS  
+**Repository:** https://github.com/MarvenAPPS/zepp-productivity-alarm  
+**Zepp OS:** https://github.com/zepp-health/zeppos-samples
+
+---
+
+## 📞 Support
+
+For issues, questions, or contributions:
+
+- **Issues:** https://github.com/MarvenAPPS/zepp-productivity-alarm/issues
+- **Pull Requests:** https://github.com/MarvenAPPS/zepp-productivity-alarm/pulls
+
+---
+
+<div align="center">
+
+**Built with ❤️ for Amazfit Balance**
+
+[Report Bug](https://github.com/MarvenAPPS/zepp-productivity-alarm/issues) · [Request Feature](https://github.com/MarvenAPPS/zepp-productivity-alarm/issues)
+
+</div>
