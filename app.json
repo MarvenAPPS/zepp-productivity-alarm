@@ -1,0 +1,43 @@
+{
+  "app": {
+    "appId": 1234567,
+    "appName": "Productivity Alarm",
+    "appType": "app",
+    "version": {
+      "code": 1,
+      "name": "1.0.0"
+    },
+    "icon": "icon.png",
+    "vender": "MarvenAPPS",
+    "description": "Productivity alarm with customizable questions and points system"
+  },
+  "permissions": ["device:os.alarm", "device:os.vibrate", "data:user.hd.info"],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "1.0.0",
+      "target": "1.0.1",
+      "minVersion": "1.0.0"
+    }
+  },
+  "targets": {
+    "amazfit-balance": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/index",
+            "page/alarms",
+            "page/questions",
+            "page/history",
+            "page/settings",
+            "page/alarm-trigger"
+          ]
+        }
+      }
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "name": "Productivity Alarm"
+    }
+  }
+}
