@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2015",
+    "lib": ["ES2015"],
+    "checkJs": false
+  },
+  "exclude": ["node_modules", "dist", "server"]
+}
