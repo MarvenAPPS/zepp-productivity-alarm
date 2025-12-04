@@ -26,7 +26,7 @@
     }
   },
   "targets": {
-    "default": {
+    "gt": {
       "module": {
         "page": {
           "pages": [
@@ -41,10 +41,7 @@
       },
       "platforms": [
         {
-          "name": "amazfit-balance",
-          "deviceSource": 234,
-          "st": "r",
-          "dw": 466
+          "st": "r"
         }
       ],
       "designWidth": 466
