@@ -1,0 +1,33 @@
+# Create Icon File
+
+You need to create a 192x192 PNG icon named `icon.png` in the ROOT directory (not assets/).
+
+## Quick Methods:
+
+### Method 1: ImageMagick (macOS/Linux)
+```bash
+brew install imagemagick
+convert -size 192x192 xc:"#32B8C6" icon.png
+```
+
+### Method 2: Node.js
+```bash
+npm install sharp
+node -e "require('sharp')({create:{width:192,height:192,channels:4,background:{r:50,g:184,b:198,alpha:1}}}).png().toFile('icon.png')"
+```
+
+### Method 3: Manual
+1. Create 192x192 image in any image editor
+2. Fill with #32B8C6 (teal)
+3. Save as `icon.png` in project root
+
+### Method 4: Download placeholder
+```bash
+# Simple colored square
+curl -o icon.png "https://via.placeholder.com/192/32B8C6/FFFFFF?text=PA"
+```
+
+After creating icon.png, delete this file and run:
+```bash
+zeus build
+```
