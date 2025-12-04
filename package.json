@@ -1,0 +1,25 @@
+{
+  "name": "productivity-alarm",
+  "version": "1.0.0",
+  "description": "Productivity alarm with customizable questions and points system for Amazfit Balance",
+  "main": "app.js",
+  "scripts": {
+    "build": "zeus build",
+    "preview": "zeus preview",
+    "dev": "zeus dev"
+  },
+  "keywords": [
+    "zepp-os",
+    "amazfit",
+    "productivity",
+    "alarm",
+    "habits",
+    "tracker"
+  ],
+  "author": "MarvenAPPS",
+  "license": "MIT",
+  "devDependencies": {
+    "@zeppos/device-types": "^3.0.0"
+  },
+  "dependencies": {}
+}
