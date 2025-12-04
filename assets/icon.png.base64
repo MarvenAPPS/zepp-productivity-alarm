@@ -1,0 +1,42 @@
+# Icon Placeholder
+
+This is a base64-encoded 192x192 PNG icon.
+For the actual build, you need to create `assets/icon.png`.
+
+## Quick Fix: Download Icon
+
+1. Create a 192x192 PNG icon (use any design tool or icon generator)
+2. Save as `assets/icon.png`
+3. Build again
+
+## Temporary Solution
+
+Create a simple colored square:
+
+```bash
+# On macOS with ImageMagick:
+brew install imagemagick
+convert -size 192x192 xc:"#32B8C6" assets/icon.png
+
+# Or use online tool:
+# https://www.canva.com/ (192x192 px)
+# https://www.figma.com/ (192x192 px)
+```
+
+## Icon Requirements
+
+- **Size**: 192x192 pixels
+- **Format**: PNG with transparency
+- **Background**: Can be transparent or solid color
+- **Design**: Simple alarm clock or productivity symbol
+- **Colors**: Use app theme colors (#32B8C6 teal)
+
+## Icon Ideas
+
+1. **Alarm Clock** ⏰ - Classic alarm bell
+2. **Checkmark** ✓ - Productivity completion
+3. **Target** 🎯 - Goals/targets
+4. **Trophy** 🏆 - Achievement/rewards
+5. **Brain** 🧠 - Productivity/thinking
+
+Use app primary color: `#32B8C6` (teal)

@@ -1,0 +1,34 @@
+# Zepp OS build output
+dist/
+*.bin
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Server data
+server/data/
+server/*.db
+
+# Temporary files
+tmp/
+temp/
+
+# Note: icon.png should be committed
+# Remove this line once you add your icon:
+# assets/icon.png
