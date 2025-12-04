@@ -1,28 +1,22 @@
 {
   "configVersion": "v3",
   "app": {
+    "appType": "app",
     "appId": 1234567,
     "appName": "Productivity Alarm",
-    "appType": "app",
     "version": {
       "code": 1,
       "name": "1.0.0"
     },
-    "icon": "assets/icon.png",
+    "icon": "icon.png",
     "vender": "MarvenAPPS",
     "description": "Productivity alarm with customizable questions and points system"
   },
-  "permissions": [
-    "device:os.alarm",
-    "device:os.vibrate",
-    "data:user.hd.info",
-    "data:os.device.info"
-  ],
   "runtime": {
     "apiVersion": {
-      "compatible": "3.7",
-      "target": "4.2",
-      "minVersion": "3.7"
+      "compatible": "3.0",
+      "target": "3.0",
+      "minVersion": "3.0"
     }
   },
   "targets": {
@@ -30,33 +24,29 @@
       "module": {
         "page": {
           "pages": [
-            "page/index",
-            "page/alarms",
-            "page/questions",
-            "page/history",
-            "page/settings",
-            "page/alarm-trigger"
+            "page/index.page"
           ]
         }
       },
       "platforms": [
         {
-          "st": "r"
+          "st": "r",
+          "dw": 466
         }
-      ],
-      "designWidth": 466
+      ]
     }
   },
+  "permissions": [
+    "device:os.alarm",
+    "device:os.vibrate",
+    "data:user.hd.info",
+    "data:os.device.info"
+  ],
   "i18n": {
     "en-US": {
       "appName": "Productivity Alarm"
-    },
-    "fr-FR": {
-      "appName": "Alarme de Productivité"
-    },
-    "ar-EG": {
-      "appName": "منبه الإنتاجية"
     }
   },
-  "defaultLanguage": "en-US"
+  "defaultLanguage": "en-US",
+  "debug": false
 }
