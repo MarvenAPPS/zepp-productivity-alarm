@@ -24,7 +24,12 @@
       "module": {
         "page": {
           "pages": [
-            "page/index.page"
+            "page/index.page",
+            "page/alarms.page",
+            "page/history.page",
+            "page/settings.page",
+            "page/alarm-trigger.page",
+            "page/questions.page"
           ]
         }
       },
