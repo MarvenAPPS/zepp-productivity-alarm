@@ -1,0 +1,18 @@
+# Assets Directory
+
+Place your app icons and images here:
+
+- `icon.png` - App icon (192x192px PNG)
+- Other image assets as needed
+
+## Icon Requirements (Amazfit Balance)
+
+- **Format**: PNG with transparency
+- **Size**: 192x192 pixels
+- **Background**: Transparent or solid color
+- **Design**: Simple, recognizable at small sizes
+
+## Temporary Note
+
+The app will use a default icon if `icon.png` is not present.
+For production, please add a proper icon to this directory.
